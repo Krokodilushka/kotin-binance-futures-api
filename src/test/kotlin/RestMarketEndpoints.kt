@@ -12,17 +12,18 @@ class RestMarketEndpoints {
             BinanceFuturesApiMarketRestClient(apiUrl = "https://testnet.binancefuture.com")
     }
 
-    @Test
-    fun exchangeInfo() {
-        client.exchangeInfo().let {
-            println(it.body())
-        }
-    }
+//    @Test
+//    fun exchangeInfo() {
+//        client.exchangeInfo().let {
+//            println(it.body())
+//        }
+//    }
 
-    fun candlesTick() {
-        client.candlesTick("BTCUSDT", CANDLESTICK_CHART_INTERVAL.H1).let {
-            println(it.body())
-        }
-    }
+//    @Test
+//    fun candlesTick() {
+//        client.candlesTick("BTCUSDT", CANDLESTICK_CHART_INTERVAL.H1).let {
+//            println(it.body())
+//        }
+//    }
 
 }
