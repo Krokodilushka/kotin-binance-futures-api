@@ -29,4 +29,6 @@ class BinanceFuturesApiMarketRestClient(
         )
     )
 
+    fun markPrice(symbol: String? = null) = BinanceApiService.executeSync(service.markPrice(symbol))
+
 }

@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    api("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
     implementation("commons-codec:commons-codec:1.15")
@@ -25,7 +25,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "org.krokodilushka"
             artifactId = "kotin-binance-futures-api"
-            version = "1.0.0"
+            version = "1.0.5"
 
             from(components["java"])
         }

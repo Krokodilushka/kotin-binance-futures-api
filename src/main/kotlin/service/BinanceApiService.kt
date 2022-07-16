@@ -17,57 +17,46 @@ import java.util.concurrent.TimeUnit
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-class BinanceApiService {
+object BinanceApiService {
 
-    companion object {
-        val httpClient: OkHttpClient = OkHttpClient.Builder()
+    val httpClient: OkHttpClient = OkHttpClient.Builder()
 //            .pingInterval(20, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .build()
-        private val converterFactory = JacksonConverterFactory.create(ObjectMapper().registerKotlinModule())
-        private val errorBodyConverter = converterFactory.toErrorBodyConverter()
+        .readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .build()
+    private val converterFactory = JacksonConverterFactory.create(ObjectMapper().registerKotlinModule())
+    private val errorBodyConverter = converterFactory.toErrorBodyConverter()
 
-        fun <S> createService(serviceClass: Class<S>, baseUrl: String): S {
-            return httpClient.retrofitBuilder(baseUrl).build().create(serviceClass)
-        }
+    fun <S> createService(serviceClass: Class<S>, baseUrl: String): S {
+        return httpClient.retrofitBuilder(baseUrl).build().create(serviceClass)
+    }
 
-        fun <S> createService(serviceClass: Class<S>, apiKey: String, secret: String, baseUrl: String): S {
-            return AuthenticationInterceptor(apiKey, secret).let {
-                httpClient.newBuilder().addInterceptor(it).build()
-            }.retrofitBuilder(baseUrl).build().create(serviceClass)
-        }
+    fun <S> createService(serviceClass: Class<S>, apiKey: String, secret: String, baseUrl: String): S {
+        return AuthenticationInterceptor(apiKey, secret).let {
+            httpClient.newBuilder().addInterceptor(it).build()
+        }.retrofitBuilder(baseUrl).build().create(serviceClass)
+    }
 
-        fun <T> executeSync(call: Call<T>): Response<T> {
-            val response = call.execute()
-            if (response.isSuccessful) {
-                return response
-            } else {
-                val apiError = errorBodyConverter.convert(response.errorBody()!!)!!
-                throw BinanceApiException(call.request(), response, apiError)
-            }
-        }
-
-        private fun OkHttpClient.retrofitBuilder(baseUrl: String) = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(converterFactory)
-            .client(this)
-
-        private fun Converter.Factory.toErrorBodyConverter() = responseBodyConverter(
-            BinanceApiError::class.java,
-            arrayOfNulls(0),
-            null
-        ) as Converter<ResponseBody, BinanceApiError>
-
-        fun Headers.extractIpLimits(): List<ResponseWithIpLimits.Limit> {
-            val ipLimits = toMultimap().filter { it.key.startsWith("x-mbx-used-weight-") }.map { map ->
-                val interval = map.key.substringAfterLast("x-mbx-used-weight-")
-                val intervalEnum = RATE_LIMIT_INTERVAL.values().find { it.headersRepresentation == interval }!!
-                ResponseWithIpLimits.Limit(intervalEnum, map.value.first().toInt())
-            }
-            return ipLimits
+    fun <T> executeSync(call: Call<T>): Response<T> {
+        val response = call.execute()
+        if (response.isSuccessful) {
+            return response
+        } else {
+            val apiError = errorBodyConverter.convert(response.errorBody()!!)!!
+            throw BinanceApiException(call.request(), response, apiError)
         }
     }
+
+    private fun OkHttpClient.retrofitBuilder(baseUrl: String) = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(converterFactory)
+        .client(this)
+
+    private fun Converter.Factory.toErrorBodyConverter() = responseBodyConverter(
+        BinanceApiError::class.java,
+        arrayOfNulls(0),
+        null
+    ) as Converter<ResponseBody, BinanceApiError>
 
     data class ResponseWithIpLimits<T>(
         val response: Response<T>,
@@ -149,4 +138,13 @@ class BinanceApiService {
         }
 
     }
+}
+
+fun Headers.extractIpLimits(): List<BinanceApiService.ResponseWithIpLimits.Limit> {
+    val ipLimits = toMultimap().filter { it.key.startsWith("x-mbx-used-weight-") }.map { map ->
+        val interval = map.key.substringAfterLast("x-mbx-used-weight-")
+        val intervalEnum = RATE_LIMIT_INTERVAL.values().find { it.headersRepresentation == interval }!!
+        BinanceApiService.ResponseWithIpLimits.Limit(intervalEnum, map.value.first().toInt())
+    }
+    return ipLimits
 }

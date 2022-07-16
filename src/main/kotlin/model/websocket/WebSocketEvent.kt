@@ -1,5 +1,6 @@
 package model.websocket
 
+import clients.BinanceWebSocketClient
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.type.TypeReference
@@ -26,9 +27,17 @@ abstract class WebSocketEvent {
                     val json = node["data"].toString()
                     val event = when {
                         // market data
-                        stream.endsWith("!ticker@arr") -> JsonToObject.convert(
+                        stream.endsWith(
+                            BinanceWebSocketClient.WebSocketStream.AllMarketTickersStreams().getStreamName()
+                        ) -> JsonToObject.convert(
                             json,
                             object : TypeReference<MarketEvent.AllMarketTickerEvent.List>() {}
+                        )
+                        stream.endsWith(
+                            BinanceWebSocketClient.WebSocketStream.MarkPrice().getStreamName()
+                        ) -> JsonToObject.convert(
+                            json,
+                            object : TypeReference<MarketEvent.MarkPriceEvent.List>() {}
                         )
                         // user events
                         else -> when (eventType) {

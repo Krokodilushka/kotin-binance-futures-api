@@ -1,6 +1,7 @@
 package clients
 
 import BinanceApiConstants
+import MARGIN_TYPE
 import ORDER_SIDE
 import ORDER_TYPE
 import POSITION_SIDE
@@ -77,12 +78,12 @@ class BinanceFuturesApiUserRestClient(
 
     fun deleteOrder(
         symbol: String,
-        orderId: String? = null,
+        orderId: Long? = null,
         origClientOrderId: String? = null
     ) = BinanceApiService.executeSync(
         service.deleteOrder(
             symbol,
-            orderId,
+            orderId.toString(),
             origClientOrderId,
             BinanceApiConstants.USER_RECEIVING_WINDOW,
             System.currentTimeMillis()
@@ -91,6 +92,20 @@ class BinanceFuturesApiUserRestClient(
 
     fun futuresAccountBalance() = BinanceApiService.executeSync(
         service.futuresAccountBalance(
+            BinanceApiConstants.USER_RECEIVING_WINDOW,
+            System.currentTimeMillis()
+        )
+    )
+
+    fun currentMultiAssetsMode() = BinanceApiService.executeSync(
+        service.currentMultiAssetsMode(
+            BinanceApiConstants.USER_RECEIVING_WINDOW,
+            System.currentTimeMillis()
+        )
+    )
+
+    fun accountInformation() = BinanceApiService.executeSync(
+        service.accountInformation(
             BinanceApiConstants.USER_RECEIVING_WINDOW,
             System.currentTimeMillis()
         )
@@ -105,4 +120,25 @@ class BinanceFuturesApiUserRestClient(
     fun closeUserDataStream(listenKey: String) =
         BinanceApiService.executeSync(service.closeUserDataStream(listenKey))
 
+    fun leverageBracket(symbol: String? = null) = BinanceApiService.executeSync(
+        service.leverageBracket(symbol, BinanceApiConstants.USER_RECEIVING_WINDOW, System.currentTimeMillis())
+    )
+
+    fun changeInitialLeverage(symbol: String, leverage: Int) = BinanceApiService.executeSync(
+        service.changeInitialLeverage(
+            symbol,
+            leverage.toString(),
+            BinanceApiConstants.USER_RECEIVING_WINDOW,
+            System.currentTimeMillis()
+        )
+    )
+
+    fun changeMarginType(symbol: String, marginType: MARGIN_TYPE) = BinanceApiService.executeSync(
+        service.changeMarginType(
+            symbol,
+            marginType.toString(),
+            BinanceApiConstants.USER_RECEIVING_WINDOW,
+            System.currentTimeMillis()
+        )
+    )
 }

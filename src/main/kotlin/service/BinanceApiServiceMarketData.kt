@@ -1,21 +1,21 @@
 package service
 
-import CONTRACT_TYPE
 import JsonToObject
 import ORDER_TYPE
 import RATE_LIMIT
 import RATE_LIMIT_INTERVAL
 import TIME_IN_FORCE
-import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import model.websocket.MarketEvent
+import model.websocket.WebSocketEvent
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -35,6 +35,8 @@ interface BinanceApiServiceMarketData {
         @Query("limit") limit: Int? = null
     ): Call<List<Candle>>
 
+    @GET("/fapi/v1/premiumIndex")
+    fun markPrice(@Query("symbol") symbol: String?): Call<MarkPrice.List>
 }
 
 @JsonIgnoreProperties(ignoreUnknown = false)
@@ -81,7 +83,7 @@ data class ExchangeInfo(
         val quotePrecision: Int,
         val underlyingType: String,
         val underlyingSubType: List<String>,
-        val settlePlan: Int,
+        val settlePlan: Long,
         val triggerProtect: BigDecimal,
         @JsonDeserialize(contentUsing = SymbolFilter.Deserializer::class)
         val filters: List<SymbolFilter>,
@@ -184,3 +186,32 @@ data class Candle(
     val takerBuyBaseAssetVolume: BigDecimal,
     val takerBuyQuoteAssetVolume: BigDecimal,
 )
+
+@JsonIgnoreProperties(ignoreUnknown = false)
+data class MarkPrice(
+    val symbol: String,
+    val markPrice: BigDecimal,
+    val indexPrice: BigDecimal,
+    val estimatedSettlePrice: BigDecimal,
+    val lastFundingRate: BigDecimal,
+    val nextFundingTime: Long,
+    val interestRate: BigDecimal,
+    val time: Long
+) {
+
+    @JsonDeserialize(using = Deserializer::class)
+    data class List(val list: kotlin.collections.List<MarkPrice>)
+
+    class Deserializer : JsonDeserializer<List>() {
+        private val typeReference = object : TypeReference<kotlin.collections.List<MarkPrice>>() {}
+        override fun deserialize(jp: JsonParser, ctx: DeserializationContext): List {
+            val node = jp.codec.readTree<JsonNode>(jp)
+            val json = node.toString()
+            val list = when (node.isObject) {
+                true -> listOf(JsonToObject.convert(json, MarkPrice::class.java))
+                false -> JsonToObject.convert(json, typeReference)
+            }
+            return List(list)
+        }
+    }
+}

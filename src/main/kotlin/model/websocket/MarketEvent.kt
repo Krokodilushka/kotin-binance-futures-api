@@ -45,4 +45,29 @@ sealed class MarketEvent : WebSocketEvent() {
             }
         }
     }
+
+    @JsonIgnoreProperties(ignoreUnknown = false)
+    data class MarkPriceEvent(
+        @JsonProperty("e") val eventType: String,
+        @JsonProperty("E") val eventTime: Long,
+        @JsonProperty("s") val symbol: String,
+        @JsonProperty("p") val markPrice: BigDecimal,
+        @JsonProperty("i") val indexPrice: BigDecimal,
+        @JsonProperty("P") val estimatedSettlePrice: BigDecimal,
+        @JsonProperty("r") val fundingRate: BigDecimal,
+        @JsonProperty("T") val nextFundingTime: Long,
+    ) : MarketEvent() {
+        @JsonDeserialize(using = Deserializer::class)
+        data class List(val list: kotlin.collections.List<MarkPriceEvent>) : WebSocketEvent()
+
+        class Deserializer : JsonDeserializer<List>() {
+            override fun deserialize(jp: JsonParser, ctx: DeserializationContext): List {
+                val node = jp.codec.readTree<JsonNode>(jp)
+                val json = node.toString()
+                val typeReference = object : TypeReference<kotlin.collections.List<MarkPriceEvent>>() {}
+                val list = JsonToObject.convert(json, typeReference)
+                return List(list)
+            }
+        }
+    }
 }

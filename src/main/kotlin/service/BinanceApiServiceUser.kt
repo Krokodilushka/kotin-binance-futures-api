@@ -1,5 +1,6 @@
 package service
 
+import MARGIN_TYPE
 import ORDER_SIDE
 import ORDER_STATUS
 import ORDER_TYPE
@@ -71,6 +72,28 @@ interface BinanceApiServiceUser {
     ): Call<List<FuturesAccountBalance>>
 
     @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+    @GET("/fapi/v1/multiAssetsMargin")
+    fun currentMultiAssetsMode(
+        @Query("recvWindow") recvWindow: Long?,
+        @Query("timestamp") timestamp: Long
+    ): Call<MultiAssetsMargin>
+
+    @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+    @POST("/fapi/v1/multiAssetsMargin")
+    fun changeMultiAssetsMode(
+        @Query("multiAssetsMargin") multiAssetsMargin: String,
+        @Query("recvWindow") recvWindow: Long?,
+        @Query("timestamp") timestamp: Long
+    ): Call<CodeMsg>
+
+    @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+    @GET("/fapi/v2/account")
+    fun accountInformation(
+        @Query("recvWindow") recvWindow: Long?,
+        @Query("timestamp") timestamp: Long
+    ): Call<AccountInformation>
+
+    @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
     @POST("/fapi/v1/listenKey")
     fun startUserDataStream(): Call<ListenKey>
 
@@ -81,6 +104,33 @@ interface BinanceApiServiceUser {
     @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
     @DELETE("/api/v3/userDataStream")
     fun closeUserDataStream(@Query("listenKey") listenKey: String): Call<Empty>
+
+    @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+    @GET("/fapi/v1/leverageBracket")
+    fun leverageBracket(
+        @Query("symbol") symbol: String?,
+        @Query("recvWindow") recvWindow: Long?,
+        @Query("timestamp") timestamp: Long
+    ): Call<List<LeverageBracket>>
+
+    @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+    @POST("/fapi/v1/leverage")
+    fun changeInitialLeverage(
+        @Query("symbol") symbol: String,
+        @Query("leverage") leverage: String,
+        @Query("recvWindow") recvWindow: Long?,
+        @Query("timestamp") timestamp: Long
+    ): Call<ChangeInitialLeverage>
+
+    @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+    @POST("/fapi/v1/marginType")
+    fun changeMarginType(
+        @Query("symbol") symbol: String,
+        @Query("marginType") marginType: String,
+        @Query("recvWindow") recvWindow: Long?,
+        @Query("timestamp") timestamp: Long
+    ): Call<CodeMsg>
+
 }
 
 @JsonIgnoreProperties(ignoreUnknown = false)
@@ -127,7 +177,9 @@ data class Position(
     val unRealizedProfit: BigDecimal,
     val updateTime: Long,
     val entryPrice: BigDecimal,
-)
+) {
+
+}
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 data class NewOrder(
@@ -170,7 +222,98 @@ data class FuturesAccountBalance(
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+data class MultiAssetsMargin(
+    val multiAssetsMargin: Boolean,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class AccountInformation(
+    val feeTier: Int,
+    val canTrade: Boolean,
+    val canDeposit: Boolean,
+    val canWithdraw: Boolean,
+    val updateTime: Long,
+    val totalInitialMargin: BigDecimal,
+    val totalMaintMargin: BigDecimal,
+    val totalWalletBalance: BigDecimal,
+    val totalUnrealizedProfit: BigDecimal,
+    val totalMarginBalance: BigDecimal,
+    val totalPositionInitialMargin: BigDecimal,
+    val totalOpenOrderInitialMargin: BigDecimal,
+    val totalCrossWalletBalance: BigDecimal,
+    val totalCrossUnPnl: BigDecimal,
+    val availableBalance: BigDecimal,
+    val maxWithdrawAmount: BigDecimal,
+    val assets: List<Asset>,
+    val positions: List<Position>,
+) {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Asset(
+        val asset: String,
+        val walletBalance: BigDecimal,
+        val unrealizedProfit: BigDecimal,
+        val marginBalance: BigDecimal,
+        val maintMargin: BigDecimal,
+        val initialMargin: BigDecimal,
+        val positionInitialMargin: BigDecimal,
+        val openOrderInitialMargin: BigDecimal,
+        val crossWalletBalance: BigDecimal,
+        val crossUnPnl: BigDecimal,
+        val availableBalance: BigDecimal,
+        val maxWithdrawAmount: BigDecimal,
+        val marginAvailable: Boolean,
+        val updateTime: Long,
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Position(
+        val symbol: String,
+        val initialMargin: BigDecimal,
+        val maintMargin: BigDecimal,
+        val unrealizedProfit: BigDecimal,
+        val positionInitialMargin: BigDecimal,
+        val openOrderInitialMargin: BigDecimal,
+        val leverage: Int,
+        val isolated: Boolean,
+        val entryPrice: BigDecimal,
+        val maxNotional: BigDecimal,
+        val bidNotional: BigDecimal,
+        val askNotional: BigDecimal,
+        val positionSide: POSITION_SIDE,
+        val positionAmt: BigDecimal,
+        val updateTime: Long,
+    )
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class CodeMsg(
+    val code: Int,
+    val msg: String?
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class ListenKey(
     @JsonProperty("listenKey")
     val listenKey: String
+)
+
+
+data class LeverageBracket(
+    val symbol: String,
+    val brackets: List<Bracket>
+) {
+    data class Bracket(
+        val bracket: Long,
+        val initialLeverage: Long,
+        val notionalCap: Long,
+        val notionalFloor: Long,
+        val maintMarginRatio: BigDecimal,
+        val cum: Long,
+    )
+}
+
+data class ChangeInitialLeverage(
+    val leverage: Int,
+    val maxNotionalValue: String,
+    val symbol: String
 )

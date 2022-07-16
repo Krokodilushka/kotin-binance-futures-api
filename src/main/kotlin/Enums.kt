@@ -95,3 +95,7 @@ enum class RATE_LIMIT {
 enum class RATE_LIMIT_INTERVAL(val headersRepresentation: String) {
     MINUTE("1m"), SECOND("1s")
 }
+
+enum class MARGIN_TYPE {
+    ISOLATED, CROSSED
+}

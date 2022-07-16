@@ -101,6 +101,10 @@ class BinanceWebSocketClient(
             override fun getStreamName() = "!ticker@arr"
         }
 
+        class MarkPrice : WebSocketStream {
+            override fun getStreamName() = "!markPrice@arr"
+        }
+
         data class UserData(val listenKey: String) : WebSocketStream {
             override fun getStreamName() = listenKey
         }
