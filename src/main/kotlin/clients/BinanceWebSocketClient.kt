@@ -25,20 +25,12 @@ class BinanceWebSocketClient(
         }
         val streamingUrl =
             webSocketBaseUrl + "/stream?streams=" + channels.joinToString(separator = "/") { it.getStreamName() }
-        println("streamingUrl: $streamingUrl")
         val request = Request.Builder().url(streamingUrl).build()
         webSocket = client.newWebSocket(request, listener)
     }
 
     fun close() {
-        webSocket?.let { ws ->
-            listener?.let { l->
-                val code = 1000
-                l.onClosing(ws, code, "Closed by user")
-                ws.close(code, null)
-                l.onClosed(ws, code, "Closed by user")
-            }
-        }
+        webSocket?.close(1000, "Closed by user")
     }
 
     fun message(message: WebSocketMessage.Request) {
@@ -50,7 +42,8 @@ class BinanceWebSocketClient(
         fun onEvent(eventWrapper: WebSocketEvent.Wrapper<WebSocketEvent>)
         fun onMessage(message: WebSocketMessage.Wrapper<WebSocketMessage.Wrapper.Response>) {}
         fun onFailure(cause: Throwable)
-        fun onClosing(code: Int, reason: String) {}
+        fun onClosing(code: Int, reason: String)
+        fun onClosed(code: Int, reason: String)
     }
 
     class BinanceApiWebSocketListener(private val callback: WebSocketCallback) :
@@ -74,14 +67,16 @@ class BinanceWebSocketClient(
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-            isClosed = true
             callback.onClosing(code, reason)
         }
 
+        override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+            isClosed = true
+            callback.onClosed(code, reason)
+        }
+
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-            if (!isClosed) {
-                callback.onFailure(t)
-            }
+            callback.onFailure(t)
         }
 
         private fun textToEventWrapper(text: String): WebSocketEvent.Wrapper<WebSocketEvent>? {

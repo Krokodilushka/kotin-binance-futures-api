@@ -37,6 +37,9 @@ interface BinanceApiServiceMarketData {
 
     @GET("/fapi/v1/premiumIndex")
     fun markPrice(@Query("symbol") symbol: String?): Call<MarkPrice.List>
+
+    @GET("/fapi/v1/ticker/price")
+    fun price(): Call<Price.List>
 }
 
 @JsonIgnoreProperties(ignoreUnknown = false)
@@ -209,6 +212,30 @@ data class MarkPrice(
             val json = node.toString()
             val list = when (node.isObject) {
                 true -> listOf(JsonToObject.convert(json, MarkPrice::class.java))
+                false -> JsonToObject.convert(json, typeReference)
+            }
+            return List(list)
+        }
+    }
+}
+
+@JsonIgnoreProperties(ignoreUnknown = false)
+data class Price(
+    val symbol: String,
+    val price: BigDecimal,
+    val time: Long
+) {
+
+    @JsonDeserialize(using = Deserializer::class)
+    data class List(val list: kotlin.collections.List<Price>)
+
+    class Deserializer : JsonDeserializer<List>() {
+        private val typeReference = object : TypeReference<kotlin.collections.List<Price>>() {}
+        override fun deserialize(jp: JsonParser, ctx: DeserializationContext): List {
+            val node = jp.codec.readTree<JsonNode>(jp)
+            val json = node.toString()
+            val list = when (node.isObject) {
+                true -> listOf(JsonToObject.convert(json, Price::class.java))
                 false -> JsonToObject.convert(json, typeReference)
             }
             return List(list)
