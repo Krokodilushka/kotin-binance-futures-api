@@ -1,14 +1,13 @@
 package clients
 
 import BinanceApiConstants
-import MARGIN_TYPE
-import ORDER_SIDE
-import ORDER_TYPE
-import POSITION_SIDE
-import RESPONSE_TYPE
-import TIME_IN_FORCE
-import WORKING_TYPE
-import retrofit2.http.Query
+import MarginTypeEnum
+import OrderSideEnum
+import OrderTypeEnum
+import PositionSideEnum
+import ResponseTypeEnum
+import TimeInForceEnum
+import WorkingTypeEnum
 import service.BinanceApiService
 import service.BinanceApiServiceUser
 import java.math.BigDecimal
@@ -40,10 +39,10 @@ class BinanceFuturesApiUserRestClient(
 
     fun newOrder(
         symbol: String,
-        side: ORDER_SIDE,
-        positionSide: POSITION_SIDE? = null,
-        type: ORDER_TYPE,
-        timeInForce: TIME_IN_FORCE? = null,
+        side: OrderSideEnum,
+        positionSide: PositionSideEnum? = null,
+        type: OrderTypeEnum,
+        timeInForce: TimeInForceEnum? = null,
         quantity: BigDecimal? = null,
         reduceOnly: Boolean? = null,
         price: BigDecimal? = null,
@@ -52,8 +51,8 @@ class BinanceFuturesApiUserRestClient(
         closePosition: Boolean? = null,
         activationPrice: BigDecimal? = null,
         callbackRate: BigDecimal? = null,
-        workingType: WORKING_TYPE? = null,
-        newOrderRespType: RESPONSE_TYPE? = null,
+        workingType: WorkingTypeEnum? = null,
+        newOrderRespType: ResponseTypeEnum? = null,
     ) = BinanceApiService.executeSync(
         service.newOrder(
             symbol,
@@ -133,10 +132,10 @@ class BinanceFuturesApiUserRestClient(
         )
     )
 
-    fun changeMarginType(symbol: String, marginType: MARGIN_TYPE) = BinanceApiService.executeSync(
+    fun changeMarginType(symbol: String, marginTypeEnum: MarginTypeEnum) = BinanceApiService.executeSync(
         service.changeMarginType(
             symbol,
-            marginType.toString(),
+            marginTypeEnum.toString(),
             BinanceApiConstants.USER_RECEIVING_WINDOW,
             System.currentTimeMillis()
         )

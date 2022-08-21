@@ -1,6 +1,6 @@
 package service
 
-import RATE_LIMIT_INTERVAL
+import RateLimitIntervalEnum
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import model.rest.BinanceApiError
@@ -63,7 +63,7 @@ object BinanceApiService {
         val usedLimits: List<Limit>
     ) {
         data class Limit(
-            val interval: RATE_LIMIT_INTERVAL,
+            val interval: RateLimitIntervalEnum,
             val used: Int,
         )
     }
@@ -143,7 +143,7 @@ object BinanceApiService {
 fun Headers.extractIpLimits(): List<BinanceApiService.ResponseWithIpLimits.Limit> {
     val ipLimits = toMultimap().filter { it.key.startsWith("x-mbx-used-weight-") }.map { map ->
         val interval = map.key.substringAfterLast("x-mbx-used-weight-")
-        val intervalEnum = RATE_LIMIT_INTERVAL.values().find { it.headersRepresentation == interval }!!
+        val intervalEnum = RateLimitIntervalEnum.values().find { it.headersRepresentation == interval }!!
         BinanceApiService.ResponseWithIpLimits.Limit(intervalEnum, map.value.first().toInt())
     }
     return ipLimits

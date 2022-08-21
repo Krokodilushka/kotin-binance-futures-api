@@ -1,10 +1,10 @@
 package service
 
 import JsonToObject
-import ORDER_TYPE
-import RATE_LIMIT
-import RATE_LIMIT_INTERVAL
-import TIME_IN_FORCE
+import OrderTypeEnum
+import RateLimitEnum
+import RateLimitIntervalEnum
+import TimeInForceEnum
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import model.websocket.MarketEvent
-import model.websocket.WebSocketEvent
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -27,8 +25,18 @@ interface BinanceApiServiceMarketData {
     fun exchangeInfo(): Call<ExchangeInfo>
 
     @GET("/fapi/v1/klines")
-    fun candlesTick(
+    fun kline(
         @Query("symbol") symbol: String,
+        @Query("interval") interval: String,
+        @Query("startTime") startTime: Long? = null,
+        @Query("endTime") endTime: Long? = null,
+        @Query("limit") limit: Int? = null
+    ): Call<List<Candle>>
+
+    @GET("/fapi/v1/continuousKlines")
+    fun continuousContractKline(
+        @Query("pair") pair: String,
+        @Query("contractType") contractType: String,
         @Query("interval") interval: String,
         @Query("startTime") startTime: Long? = null,
         @Query("endTime") endTime: Long? = null,
@@ -54,8 +62,8 @@ data class ExchangeInfo(
 ) {
     @JsonIgnoreProperties(ignoreUnknown = false)
     data class RateLimit(
-        val rateLimitType: RATE_LIMIT,
-        val interval: RATE_LIMIT_INTERVAL,
+        val rateLimitType: RateLimitEnum,
+        val interval: RateLimitIntervalEnum,
         val intervalNum: Long,
         val limit: Long
     )
@@ -90,8 +98,8 @@ data class ExchangeInfo(
         val triggerProtect: BigDecimal,
         @JsonDeserialize(contentUsing = SymbolFilter.Deserializer::class)
         val filters: List<SymbolFilter>,
-        val orderTypes: List<ORDER_TYPE>,
-        val timeInForce: List<TIME_IN_FORCE>,
+        val orderTypes: List<OrderTypeEnum>,
+        val timeInForce: List<TimeInForceEnum>,
         val liquidationFee: BigDecimal,
         val marketTakeBound: BigDecimal,
     ) {

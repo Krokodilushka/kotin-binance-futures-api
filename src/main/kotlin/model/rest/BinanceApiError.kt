@@ -8,5 +8,5 @@ data class BinanceApiError(
     @JsonProperty("code")
     val code: Int,
     @JsonProperty("msg")
-    val msg: String
+    val msg: String?
 )

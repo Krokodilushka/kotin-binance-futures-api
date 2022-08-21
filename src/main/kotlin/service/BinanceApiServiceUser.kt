@@ -1,13 +1,12 @@
 package service
 
-import MARGIN_TYPE
-import ORDER_SIDE
-import ORDER_STATUS
-import ORDER_TYPE
-import POSITION_SIDE
-import RESPONSE_TYPE
-import TIME_IN_FORCE
-import WORKING_TYPE
+import OrderSideEnum
+import OrderStatusEnum
+import OrderTypeEnum
+import PositionSideEnum
+import ResponseTypeEnum
+import TimeInForceEnum
+import WorkingTypeEnum
 import com.fasterxml.jackson.annotation.*
 import model.rest.Empty
 import retrofit2.Call
@@ -36,10 +35,10 @@ interface BinanceApiServiceUser {
     @POST("/fapi/v1/order")
     fun newOrder(
         @Query("symbol") symbol: String,
-        @Query("side") side: ORDER_SIDE,
-        @Query("positionSide") positionSide: POSITION_SIDE?,
-        @Query("type") type: ORDER_TYPE,
-        @Query("timeInForce") timeInForce: TIME_IN_FORCE?,
+        @Query("side") side: OrderSideEnum,
+        @Query("positionSide") positionSide: PositionSideEnum?,
+        @Query("type") type: OrderTypeEnum,
+        @Query("timeInForce") timeInForce: TimeInForceEnum?,
         @Query("quantity") quantity: String?,
         @Query("reduceOnly") reduceOnly: Boolean?,
         @Query("price") price: String?,
@@ -48,8 +47,8 @@ interface BinanceApiServiceUser {
         @Query("closePosition") closePosition: Boolean?,
         @Query("activationPrice") activationPrice: String?,
         @Query("callbackRate") callbackRate: String?,
-        @Query("workingType") workingType: WORKING_TYPE?,
-        @Query("newOrderRespType") newOrderRespType: RESPONSE_TYPE?,
+        @Query("workingType") workingType: WorkingTypeEnum?,
+        @Query("newOrderRespType") newOrderRespType: ResponseTypeEnum?,
         @Query("recvWindow") recvWindow: Long?,
         @Query("timestamp") timestamp: Long
     ): Call<NewOrder>
@@ -141,22 +140,22 @@ data class Order(
     val executedQty: BigDecimal,
     val orderId: Long,
     val origQty: BigDecimal,
-    val origType: ORDER_TYPE,
+    val origType: OrderTypeEnum,
     val price: BigDecimal,
     val reduceOnly: Boolean,
-    val side: ORDER_SIDE,
-    val positionSide: POSITION_SIDE,
-    val status: ORDER_STATUS,
+    val side: OrderSideEnum,
+    val positionSide: PositionSideEnum,
+    val status: OrderStatusEnum,
     val stopPrice: BigDecimal,
     val closePosition: Boolean,
     val symbol: String,
     val time: Long,
     val timeInForce: String,
-    val type: ORDER_TYPE,
+    val type: OrderTypeEnum,
     val activatePrice: BigDecimal?,
     val priceRate: BigDecimal?,
     val updateTime: Long,
-    val workingType: WORKING_TYPE,
+    val workingType: WorkingTypeEnum,
     val priceProtect: Boolean
 )
 
@@ -173,7 +172,7 @@ data class Position(
     val maxNotionalValue: BigDecimal,
     val notional: BigDecimal,
     val positionAmt: BigDecimal,
-    val positionSide: POSITION_SIDE,
+    val positionSide: PositionSideEnum,
     val unRealizedProfit: BigDecimal,
     val updateTime: Long,
     val entryPrice: BigDecimal,
@@ -192,19 +191,19 @@ data class NewOrder(
     val origQty: BigDecimal,
     val price: BigDecimal,
     val reduceOnly: Boolean,
-    val side: ORDER_SIDE,
-    val positionSide: POSITION_SIDE,
-    val status: ORDER_STATUS,
+    val side: OrderSideEnum,
+    val positionSide: PositionSideEnum,
+    val status: OrderStatusEnum,
     val stopPrice: BigDecimal,
     val closePosition: Boolean,
     val symbol: String,
-    val timeInForce: TIME_IN_FORCE,
-    val type: ORDER_TYPE,
-    val origType: ORDER_TYPE,
+    val timeInForce: TimeInForceEnum,
+    val type: OrderTypeEnum,
+    val origType: OrderTypeEnum,
     val activatePrice: BigDecimal?,
     val priceRate: BigDecimal?,
     val updateTime: Long,
-    val workingType: WORKING_TYPE,
+    val workingType: WorkingTypeEnum,
     val priceProtect: Boolean
 )
 
@@ -279,7 +278,7 @@ data class AccountInformation(
         val maxNotional: BigDecimal,
         val bidNotional: BigDecimal,
         val askNotional: BigDecimal,
-        val positionSide: POSITION_SIDE,
+        val positionSide: PositionSideEnum,
         val positionAmt: BigDecimal,
         val updateTime: Long,
     )

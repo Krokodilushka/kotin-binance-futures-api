@@ -1,6 +1,7 @@
 package clients
 
-import CANDLESTICK_CHART_INTERVAL
+import CandlesTickChartIntervalEnum
+import ContinuousContractKlineTypeEnum
 import service.BinanceApiService
 import service.BinanceApiServiceMarketData
 
@@ -13,15 +14,33 @@ class BinanceFuturesApiMarketRestClient(
 
     fun exchangeInfo() = BinanceApiService.executeSync(service.exchangeInfo())
 
-    fun candlesTick(
+    fun kline(
         symbol: String,
-        interval: CANDLESTICK_CHART_INTERVAL,
+        interval: CandlesTickChartIntervalEnum,
         startTime: Long? = null,
         endTime: Long? = null,
         limit: Int? = null
     ) = BinanceApiService.executeSync(
-        service.candlesTick(
+        service.kline(
             symbol,
+            interval.apiRepresentation,
+            startTime,
+            endTime,
+            limit
+        )
+    )
+
+    fun continuousContractKline(
+        pair: String,
+        contractType: ContinuousContractKlineTypeEnum,
+        interval: CandlesTickChartIntervalEnum,
+        startTime: Long? = null,
+        endTime: Long? = null,
+        limit: Int? = null
+    ) = BinanceApiService.executeSync(
+        service.continuousContractKline(
+            pair,
+            contractType.toString(),
             interval.apiRepresentation,
             startTime,
             endTime,

@@ -1,8 +1,8 @@
-enum class SYMBOL_TYPE {
+enum class SymbolTypeEnum {
     FUTURE
 }
 
-enum class CONTRACT_TYPE {
+enum class ContractTypeEnum {
     PERPETUAL,
     CURRENT_MONTH,
     NEXT_MONTH,
@@ -11,7 +11,7 @@ enum class CONTRACT_TYPE {
     PERPETUAL_DELIVERING
 }
 
-enum class CONTRACT_STATUS {
+enum class ContractStatusEnum {
     PENDING_TRADING,
     TRADING,
     PRE_DELIVERING,
@@ -22,7 +22,7 @@ enum class CONTRACT_STATUS {
     CLOSE
 }
 
-enum class ORDER_STATUS {
+enum class OrderStatusEnum {
     NEW,
     PARTIALLY_FILLED,
     FILLED,
@@ -31,7 +31,7 @@ enum class ORDER_STATUS {
     EXPIRED
 }
 
-enum class ORDER_TYPE {
+enum class OrderTypeEnum {
     LIMIT,
     MARKET,
     STOP,
@@ -41,35 +41,35 @@ enum class ORDER_TYPE {
     TRAILING_STOP_MARKET
 }
 
-enum class ORDER_SIDE {
+enum class OrderSideEnum {
     BUY,
     SELL
 }
 
-enum class POSITION_SIDE {
+enum class PositionSideEnum {
     BOTH,
     LONG,
     SHORT
 }
 
-enum class TIME_IN_FORCE {
+enum class TimeInForceEnum {
     GTC,
     IOC,
     FOK,
     GTX
 }
 
-enum class WORKING_TYPE {
+enum class WorkingTypeEnum {
     MARK_PRICE,
     CONTRACT_PRICE
 }
 
-enum class RESPONSE_TYPE {
+enum class ResponseTypeEnum {
     ACK,
     RESULT
 }
 
-enum class CANDLESTICK_CHART_INTERVAL(val apiRepresentation: String) {
+enum class CandlesTickChartIntervalEnum(val apiRepresentation: String) {
     M1("1m"),
     M3("3m"),
     M5("5m"),
@@ -87,15 +87,21 @@ enum class CANDLESTICK_CHART_INTERVAL(val apiRepresentation: String) {
     MO1("1M"),
 }
 
-enum class RATE_LIMIT {
+enum class RateLimitEnum {
     REQUEST_WEIGHT,
     ORDERS
 }
 
-enum class RATE_LIMIT_INTERVAL(val headersRepresentation: String) {
+enum class RateLimitIntervalEnum(val headersRepresentation: String) {
     MINUTE("1m"), SECOND("1s")
 }
 
-enum class MARGIN_TYPE {
+enum class MarginTypeEnum {
     ISOLATED, CROSSED
+}
+
+enum class ContinuousContractKlineTypeEnum{
+    PERPETUAL,
+    CURRENT_QUARTER,
+    NEXT_QUARTER,
 }
