@@ -33,11 +33,17 @@ abstract class WebSocketEvent {
                             json,
                             object : TypeReference<MarketEvent.AllMarketTickerEvent.List>() {}
                         )
+
                         stream.endsWith(
                             BinanceWebSocketClient.WebSocketStream.MarkPrice().getStreamName()
                         ) -> JsonToObject.convert(
                             json,
                             object : TypeReference<MarketEvent.MarkPriceEvent.List>() {}
+                        )
+
+                        eventType == "continuous_kline" -> JsonToObject.convert(
+                            json,
+                            MarketEvent.ContinuousContractKlineEvent::class.java
                         )
                         // user events
                         else -> when (eventType) {
@@ -45,22 +51,27 @@ abstract class WebSocketEvent {
                                 json,
                                 UserDataEvent.MarginCall::class.java
                             )
+
                             "ACCOUNT_UPDATE" -> JsonToObject.convert(
                                 json,
                                 UserDataEvent.AccountUpdate::class.java
                             )
+
                             "ORDER_TRADE_UPDATE" -> JsonToObject.convert(
                                 json,
                                 UserDataEvent.OrderTradeUpdate::class.java
                             )
+
                             "ACCOUNT_CONFIG_UPDATE" -> JsonToObject.convert(
                                 json,
                                 UserDataEvent.AccountConfigUpdate::class.java
                             )
+
                             "listenKeyExpired" -> JsonToObject.convert(
                                 json,
                                 UserDataEvent.DataStreamExpired::class.java
                             )
+
                             else -> throw Exception("WebSocket received unknown event $eventType")
                         }
                     }

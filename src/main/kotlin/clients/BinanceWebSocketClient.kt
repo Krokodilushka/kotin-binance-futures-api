@@ -1,5 +1,7 @@
 package clients
 
+import CandlesTickChartIntervalEnum
+import ContinuousContractKlineTypeEnum
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import model.websocket.WebSocketEvent
@@ -98,6 +100,15 @@ class BinanceWebSocketClient(
 
         class MarkPrice : WebSocketStream {
             override fun getStreamName() = "!markPrice@arr"
+        }
+
+        class ContinuousContractKline(
+            val pair: String,
+            val continuousContractKline: ContinuousContractKlineTypeEnum,
+            val intervalEnum: CandlesTickChartIntervalEnum
+        ) : WebSocketStream {
+            override fun getStreamName() =
+                "${pair.lowercase()}_${continuousContractKline.name.lowercase()}@continuousKline_${intervalEnum.apiRepresentation}"
         }
 
         data class UserData(val listenKey: String) : WebSocketStream {

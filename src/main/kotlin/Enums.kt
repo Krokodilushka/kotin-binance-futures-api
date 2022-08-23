@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.annotation.JsonValue
+
 enum class SymbolTypeEnum {
     FUTURE
 }
@@ -84,7 +86,12 @@ enum class CandlesTickChartIntervalEnum(val apiRepresentation: String) {
     D1("1d"),
     D3("3d"),
     W1("1w"),
-    MO1("1M"),
+    MO1("1M");
+
+    @JsonValue
+    fun continuousContractKlineEventRepresentation(): String? {
+        return apiRepresentation
+    }
 }
 
 enum class RateLimitEnum {
@@ -100,7 +107,7 @@ enum class MarginTypeEnum {
     ISOLATED, CROSSED
 }
 
-enum class ContinuousContractKlineTypeEnum{
+enum class ContinuousContractKlineTypeEnum {
     PERPETUAL,
     CURRENT_QUARTER,
     NEXT_QUARTER,

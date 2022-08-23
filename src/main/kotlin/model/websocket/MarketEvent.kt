@@ -1,5 +1,8 @@
 package model.websocket
 
+import CandlesTickChartIntervalEnum
+import ContinuousContractKlineTypeEnum
+import ContractTypeEnum
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonParser
@@ -11,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.math.BigDecimal
 
 sealed class MarketEvent : WebSocketEvent() {
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class AllMarketTickerEvent(
         @JsonProperty("e") val eventType: String,
         @JsonProperty("E") val eventTime: Long,
@@ -46,7 +49,7 @@ sealed class MarketEvent : WebSocketEvent() {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class MarkPriceEvent(
         @JsonProperty("e") val eventType: String,
         @JsonProperty("E") val eventTime: Long,
@@ -69,5 +72,33 @@ sealed class MarketEvent : WebSocketEvent() {
                 return List(list)
             }
         }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class ContinuousContractKlineEvent(
+        @JsonProperty("e") val eventType: String,
+        @JsonProperty("E") val eventTime: Long,
+        @JsonProperty("ps") val pair: String,
+        @JsonProperty("ct") val contractType: ContinuousContractKlineTypeEnum,
+        @JsonProperty("k") val kline: Kline,
+    ) : MarketEvent() {
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        data class Kline(
+            @JsonProperty("t") val klineStartTime: Long,
+            @JsonProperty("T") val klineCloseTime: Long,
+            @JsonProperty("i") val interval: CandlesTickChartIntervalEnum,
+            @JsonProperty("f") val firstTradeID: Long,
+            @JsonProperty("L") val lastTradeID: Long,
+            @JsonProperty("o") val open: BigDecimal,
+            @JsonProperty("c") val close: BigDecimal,
+            @JsonProperty("h") val high: BigDecimal,
+            @JsonProperty("l") val low: BigDecimal,
+            @JsonProperty("v") val volume: BigDecimal,
+            @JsonProperty("n") val numberOfTrades: Long,
+            @JsonProperty("x") val isClosed: Boolean,
+            @JsonProperty("q") val quoteAssetVolume: BigDecimal,
+            @JsonProperty("V") val takerBuyVolume: BigDecimal,
+            @JsonProperty("Q") val takerBuyQuoteAssetVolume: BigDecimal,
+        )
     }
 }

@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 
 sealed class UserDataEvent : WebSocketEvent() {
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class OrderTradeUpdate(
         @JsonProperty("e") val eventType: String,
         @JsonProperty("E") val eventTime: Long,
         @JsonProperty("T") val transactionTime: Long,
         @JsonProperty("o") val order: Order,
     ) : UserDataEvent() {
+        @JsonIgnoreProperties(ignoreUnknown = true)
         data class Order(
             @JsonProperty("s") val symbol: String,
             @JsonProperty("c") val clientOrderId: String,
@@ -76,27 +77,27 @@ sealed class UserDataEvent : WebSocketEvent() {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class AccountUpdate(
         @JsonProperty("e") val eventType: String,
         @JsonProperty("E") val eventTime: Long,
         @JsonProperty("T") val transactionTime: Long,
         @JsonProperty("a") val data: Data,
     ) : UserDataEvent() {
-
+        @JsonIgnoreProperties(ignoreUnknown = true)
         data class Data(
             @JsonProperty("m") val eventReason: EventReason,
             @JsonProperty("B") val balances: List<Balance>,
             @JsonProperty("P") val positions: List<Position>,
         ) {
-
+            @JsonIgnoreProperties(ignoreUnknown = true)
             data class Balance(
                 @JsonProperty("a") val asset: String,
                 @JsonProperty("wb") val walletBalance: BigDecimal,
                 @JsonProperty("cw") val crossWalletBalance: BigDecimal,
                 @JsonProperty("bc") val balanceChangeExceptPnLAndCommission: BigDecimal
             )
-
+            @JsonIgnoreProperties(ignoreUnknown = true)
             data class Position(
                 @JsonProperty("s") val symbol: String,
                 @JsonProperty("pa") val positionAmount: BigDecimal,
@@ -133,7 +134,7 @@ sealed class UserDataEvent : WebSocketEvent() {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class AccountConfigUpdate(
         @JsonProperty("e") val eventType: String,
         @JsonProperty("E") val eventTime: Long,
@@ -141,6 +142,7 @@ sealed class UserDataEvent : WebSocketEvent() {
         @JsonProperty("ac") val leverageOfTradePair: Ac?,
         @JsonProperty("ai") val multiAssetMode: Ai?,
     ) : UserDataEvent() {
+        @JsonIgnoreProperties(ignoreUnknown = true)
         data class Ac(
             @JsonProperty("s") val symbol: String,
             @JsonProperty("l") val leverage: Int,
@@ -151,13 +153,14 @@ sealed class UserDataEvent : WebSocketEvent() {
         )
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class MarginCall(
         @JsonProperty("e") val eventType: String,
         @JsonProperty("E") val eventTime: Long,
         @JsonProperty("cw") val crossWalletBalance: BigDecimal?,
         @JsonProperty("p") val positions: List<Position>,
     ) : UserDataEvent() {
+        @JsonIgnoreProperties(ignoreUnknown = true)
         data class Position(
             @JsonProperty("s") val symbol: String,
             @JsonProperty("ps") val positionSide: PositionSide,
@@ -175,7 +178,7 @@ sealed class UserDataEvent : WebSocketEvent() {
     }
 
 
-    @JsonIgnoreProperties(ignoreUnknown = false)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class DataStreamExpired(
         @JsonProperty("e") val eventType: String,
         @JsonProperty("E") val eventTime: Long,
