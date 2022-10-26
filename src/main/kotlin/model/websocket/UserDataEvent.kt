@@ -41,7 +41,7 @@ sealed class UserDataEvent : WebSocketEvent() {
             @JsonProperty("ps") val positionSide: OrderPositionSide,
             @JsonProperty("cp") val isCloseAll: Boolean,
             @JsonProperty("ap") val activationPrice: BigDecimal,
-            @JsonProperty("cr") val callbackRate: Long,
+            @JsonProperty("cr") val callbackRate: BigDecimal?,
             @JsonProperty("pP") val pP: Boolean,
             @JsonProperty("si") val si: Long,
             @JsonProperty("ss") val ss: Long,
@@ -52,7 +52,7 @@ sealed class UserDataEvent : WebSocketEvent() {
             }
 
             enum class OrderType {
-                MARKET, LIMIT, STOP, TAKE_PROFIT, LIQUIDATION
+                MARKET, LIMIT, STOP, TAKE_PROFIT, LIQUIDATION, TRAILING_STOP_MARKET
             }
 
             enum class OrderExecutionType {
@@ -97,6 +97,7 @@ sealed class UserDataEvent : WebSocketEvent() {
                 @JsonProperty("cw") val crossWalletBalance: BigDecimal,
                 @JsonProperty("bc") val balanceChangeExceptPnLAndCommission: BigDecimal
             )
+
             @JsonIgnoreProperties(ignoreUnknown = true)
             data class Position(
                 @JsonProperty("s") val symbol: String,
