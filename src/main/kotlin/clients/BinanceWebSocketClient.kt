@@ -25,9 +25,11 @@ class BinanceWebSocketClient(
         require(null !== listener) {
             "Не установлен слушатель"
         }
-        val streamingUrl =
-            webSocketBaseUrl + "/stream?streams=" + channels.joinToString(separator = "/") { it.getStreamName() }
-        val request = Request.Builder().url(streamingUrl).build()
+        val streamingUrl = StringBuilder("$webSocketBaseUrl/stream")
+        if (channels.isNotEmpty()) {
+            streamingUrl.append("?streams=" + channels.joinToString(separator = "/") { it.getStreamName() })
+        }
+        val request = Request.Builder().url(streamingUrl.toString()).build()
         webSocket = client.newWebSocket(request, listener)
     }
 
