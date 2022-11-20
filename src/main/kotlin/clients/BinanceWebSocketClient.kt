@@ -27,7 +27,7 @@ class BinanceWebSocketClient(
         }
         val streamingUrl = StringBuilder("$webSocketBaseUrl/stream")
         if (channels.isNotEmpty()) {
-            streamingUrl.append("?streams=" + channels.joinToString(separator = "/") { it.getStreamName() })
+            streamingUrl.append("?streams=" + channels.joinToString(separator = "/") { it.toString() })
         }
         val request = Request.Builder().url(streamingUrl.toString()).build()
         webSocket = client.newWebSocket(request, listener)
@@ -94,14 +94,12 @@ class BinanceWebSocketClient(
 
     interface WebSocketStream {
 
-        fun getStreamName(): String
-
         class AllMarketTickersStreams : WebSocketStream {
-            override fun getStreamName() = "!ticker@arr"
+            override fun toString() = "!ticker@arr"
         }
 
         class MarkPrice : WebSocketStream {
-            override fun getStreamName() = "!markPrice@arr"
+            override fun toString() = "!markPrice@arr"
         }
 
         class ContinuousContractKline(
@@ -109,12 +107,12 @@ class BinanceWebSocketClient(
             val continuousContractKline: ContinuousContractKlineTypeEnum,
             val intervalEnum: CandlesTickChartIntervalEnum
         ) : WebSocketStream {
-            override fun getStreamName() =
+            override fun toString(): String =
                 "${pair.lowercase()}_${continuousContractKline.name.lowercase()}@continuousKline_${intervalEnum.apiRepresentation}"
         }
 
         data class UserData(val listenKey: String) : WebSocketStream {
-            override fun getStreamName() = listenKey
+            override fun toString() = listenKey
         }
     }
 

@@ -28,14 +28,14 @@ abstract class WebSocketEvent {
                     val event = when {
                         // market data
                         stream.endsWith(
-                            BinanceWebSocketClient.WebSocketStream.AllMarketTickersStreams().getStreamName()
+                            BinanceWebSocketClient.WebSocketStream.AllMarketTickersStreams().toString()
                         ) -> JsonToObject.convert(
                             json,
                             object : TypeReference<MarketEvent.AllMarketTickerEvent.List>() {}
                         )
 
                         stream.endsWith(
-                            BinanceWebSocketClient.WebSocketStream.MarkPrice().getStreamName()
+                            BinanceWebSocketClient.WebSocketStream.MarkPrice().toString()
                         ) -> JsonToObject.convert(
                             json,
                             object : TypeReference<MarketEvent.MarkPriceEvent.List>() {}
