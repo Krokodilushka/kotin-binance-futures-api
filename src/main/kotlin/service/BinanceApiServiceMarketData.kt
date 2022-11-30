@@ -21,6 +21,9 @@ import java.math.BigDecimal
 
 interface BinanceApiServiceMarketData {
 
+    @GET("/fapi/v1/time")
+    fun time(): Call<Time>
+
     @GET("/fapi/v1/exchangeInfo")
     fun exchangeInfo(): Call<ExchangeInfo>
 
@@ -49,6 +52,11 @@ interface BinanceApiServiceMarketData {
     @GET("/fapi/v1/ticker/price")
     fun price(): Call<Price.List>
 }
+
+@JsonIgnoreProperties(ignoreUnknown = false)
+data class Time(
+    val serverTime: Long,
+)
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 data class ExchangeInfo(

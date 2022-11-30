@@ -12,6 +12,8 @@ class BinanceFuturesApiMarketRestClient(
     private val service =
         BinanceApiService.createService(BinanceApiServiceMarketData::class.java, apiUrl)
 
+    fun time() = BinanceApiService.executeSync(service.time())
+
     fun exchangeInfo() = BinanceApiService.executeSync(service.exchangeInfo())
 
     fun kline(

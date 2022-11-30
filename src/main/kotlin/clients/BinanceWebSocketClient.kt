@@ -94,15 +94,16 @@ class BinanceWebSocketClient(
 
     interface WebSocketStream {
 
-        class AllMarketTickersStreams : WebSocketStream {
+        data class AllMarketTickersStreams(val value: Nothing? = null) : WebSocketStream {
+
             override fun toString() = "!ticker@arr"
         }
 
-        class MarkPrice : WebSocketStream {
+        data class MarkPrice(val value: Nothing? = null) : WebSocketStream {
             override fun toString() = "!markPrice@arr"
         }
 
-        class ContinuousContractKline(
+        data class ContinuousContractKline(
             val pair: String,
             val continuousContractKline: ContinuousContractKlineTypeEnum,
             val intervalEnum: CandlesTickChartIntervalEnum
