@@ -1,4 +1,4 @@
-package model.rest
+package com.krokodilushka.kotlin_binance_futures_api.model.rest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

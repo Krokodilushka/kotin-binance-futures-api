@@ -1,14 +1,15 @@
-package service
+package com.krokodilushka.kotlin_binance_futures_api.service
 
-import OrderSideEnum
-import OrderStatusEnum
-import OrderTypeEnum
-import PositionSideEnum
-import ResponseTypeEnum
-import TimeInForceEnum
-import WorkingTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.OrderSideEnum
+import com.krokodilushka.kotlin_binance_futures_api.OrderStatusEnum
+import com.krokodilushka.kotlin_binance_futures_api.OrderTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.PositionSideEnum
+import com.krokodilushka.kotlin_binance_futures_api.ResponseTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.TimeInForceEnum
+import com.krokodilushka.kotlin_binance_futures_api.WorkingTypeEnum
 import com.fasterxml.jackson.annotation.*
-import model.rest.Empty
+import com.krokodilushka.kotlin_binance_futures_api.BinanceApiConstants
+import com.krokodilushka.kotlin_binance_futures_api.model.rest.Empty
 import retrofit2.Call
 import retrofit2.http.*
 import java.math.BigDecimal

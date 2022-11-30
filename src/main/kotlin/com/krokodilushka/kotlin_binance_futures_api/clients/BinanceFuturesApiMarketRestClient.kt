@@ -1,9 +1,9 @@
-package clients
+package com.krokodilushka.kotlin_binance_futures_api.clients
 
-import CandlesTickChartIntervalEnum
-import ContinuousContractKlineTypeEnum
-import service.BinanceApiService
-import service.BinanceApiServiceMarketData
+import com.krokodilushka.kotlin_binance_futures_api.CandlesTickChartIntervalEnum
+import com.krokodilushka.kotlin_binance_futures_api.ContinuousContractKlineTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.service.BinanceApiService
+import com.krokodilushka.kotlin_binance_futures_api.service.BinanceApiServiceMarketData
 
 class BinanceFuturesApiMarketRestClient(
     apiUrl: String,

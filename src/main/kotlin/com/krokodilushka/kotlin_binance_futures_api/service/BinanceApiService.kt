@@ -1,9 +1,10 @@
-package service
+package com.krokodilushka.kotlin_binance_futures_api.service
 
-import RateLimitIntervalEnum
+import com.krokodilushka.kotlin_binance_futures_api.RateLimitIntervalEnum
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import model.rest.BinanceApiError
+import com.krokodilushka.kotlin_binance_futures_api.BinanceApiConstants
+import com.krokodilushka.kotlin_binance_futures_api.model.rest.BinanceApiError
 import okhttp3.*
 import org.apache.commons.codec.binary.Hex
 import retrofit2.Call

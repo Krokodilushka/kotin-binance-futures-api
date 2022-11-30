@@ -1,7 +1,8 @@
-import clients.BinanceFuturesApiUserRestClient
-import clients.BinanceWebSocketClient
-import model.websocket.WebSocketEvent
-import service.BinanceApiService
+package com.krokodilushka.kotlin_binance_futures_api
+
+import com.krokodilushka.kotlin_binance_futures_api.clients.BinanceWebSocketClient
+import com.krokodilushka.kotlin_binance_futures_api.model.websocket.WebSocketEvent
+import com.krokodilushka.kotlin_binance_futures_api.service.BinanceApiService
 
 fun main() {
     val callback = object : BinanceWebSocketClient.WebSocketCallback {

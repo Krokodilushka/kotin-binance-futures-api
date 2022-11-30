@@ -1,4 +1,4 @@
-package model.websocket
+package com.krokodilushka.kotlin_binance_futures_api.model.websocket
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

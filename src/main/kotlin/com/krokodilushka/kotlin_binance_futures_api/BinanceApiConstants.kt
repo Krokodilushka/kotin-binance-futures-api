@@ -1,3 +1,5 @@
+package com.krokodilushka.kotlin_binance_futures_api
+
 /**
  * Constants used throughout Binance's API.
  */

@@ -1,6 +1,6 @@
-package model.websocket
+package com.krokodilushka.kotlin_binance_futures_api.model.websocket
 
-import clients.BinanceWebSocketClient
+import com.krokodilushka.kotlin_binance_futures_api.clients.BinanceWebSocketClient
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.type.TypeReference
@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.krokodilushka.kotlin_binance_futures_api.JsonToObject
 
 abstract class WebSocketEvent {
 

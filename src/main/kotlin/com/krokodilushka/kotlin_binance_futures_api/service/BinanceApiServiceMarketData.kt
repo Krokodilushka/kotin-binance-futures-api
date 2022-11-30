@@ -1,10 +1,10 @@
-package service
+package com.krokodilushka.kotlin_binance_futures_api.service
 
-import JsonToObject
-import OrderTypeEnum
-import RateLimitEnum
-import RateLimitIntervalEnum
-import TimeInForceEnum
+import com.krokodilushka.kotlin_binance_futures_api.JsonToObject
+import com.krokodilushka.kotlin_binance_futures_api.OrderTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.RateLimitEnum
+import com.krokodilushka.kotlin_binance_futures_api.RateLimitIntervalEnum
+import com.krokodilushka.kotlin_binance_futures_api.TimeInForceEnum
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonPropertyOrder

@@ -1,11 +1,11 @@
-package clients
+package com.krokodilushka.kotlin_binance_futures_api.clients
 
-import CandlesTickChartIntervalEnum
-import ContinuousContractKlineTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.CandlesTickChartIntervalEnum
+import com.krokodilushka.kotlin_binance_futures_api.ContinuousContractKlineTypeEnum
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import model.websocket.WebSocketEvent
-import model.websocket.WebSocketMessage
+import com.krokodilushka.kotlin_binance_futures_api.model.websocket.WebSocketEvent
+import com.krokodilushka.kotlin_binance_futures_api.model.websocket.WebSocketMessage
 import okhttp3.*
 
 class BinanceWebSocketClient(

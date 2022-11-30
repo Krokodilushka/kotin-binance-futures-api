@@ -1,3 +1,5 @@
+package com.krokodilushka.kotlin_binance_futures_api
+
 import com.fasterxml.jackson.annotation.JsonValue
 
 enum class SymbolTypeEnum {

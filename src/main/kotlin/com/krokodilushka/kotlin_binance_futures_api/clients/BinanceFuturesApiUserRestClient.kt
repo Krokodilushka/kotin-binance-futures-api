@@ -1,15 +1,15 @@
-package clients
+package com.krokodilushka.kotlin_binance_futures_api.clients
 
-import BinanceApiConstants
-import MarginTypeEnum
-import OrderSideEnum
-import OrderTypeEnum
-import PositionSideEnum
-import ResponseTypeEnum
-import TimeInForceEnum
-import WorkingTypeEnum
-import service.BinanceApiService
-import service.BinanceApiServiceUser
+import com.krokodilushka.kotlin_binance_futures_api.BinanceApiConstants
+import com.krokodilushka.kotlin_binance_futures_api.MarginTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.OrderSideEnum
+import com.krokodilushka.kotlin_binance_futures_api.OrderTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.PositionSideEnum
+import com.krokodilushka.kotlin_binance_futures_api.ResponseTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.TimeInForceEnum
+import com.krokodilushka.kotlin_binance_futures_api.WorkingTypeEnum
+import com.krokodilushka.kotlin_binance_futures_api.service.BinanceApiService
+import com.krokodilushka.kotlin_binance_futures_api.service.BinanceApiServiceUser
 import java.math.BigDecimal
 
 class BinanceFuturesApiUserRestClient(
